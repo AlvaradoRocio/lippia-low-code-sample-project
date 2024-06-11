@@ -1,14 +1,13 @@
-@ -0,0 +1,46 @@
 Feature: Clokify Workspace
   Background:
-    Given base url https://api.clockify.me/api
+    Given base url $(env.base_url)
     And endpoint /v1/workspaces
-    And header Content-Type = application/json
-    And header x-api-key = ZDMxZjFmMmYtN2YyYy00MGMzLThjNDEtNGZiNzFmY2FkYWQy
+    And header Content-Type = $(env.Content_Type)
+    And header x-api-key = $(env.x_api_key)
 
   @AddNewWorkspace
   Scenario Outline: POST Workspace
-    And set value nameWorkspace of key name in body jsons/bodies/NuevoWorkspace.json
+    And set value <nameWorkspace> of key name in body jsons/bodies/NuevoWorkspace.json
     When execute method POST
     Then the status code should be 201
     And define workspaceId = response.id
@@ -20,10 +19,7 @@ Feature: Clokify Workspace
 @GetWorkspaceInfo
   Scenario: GET Workspace info
   Given call Workspace.feature@AddNewWorkspace
-  And base url https://api.clockify.me/api
   And endpoint /v1/workspaces/{{workspaceId}}
-  And header Content-Type = application/json
-  And header x-api-key = ZDMxZjFmMmYtN2YyYy00MGMzLThjNDEtNGZiNzFmY2FkYWQy
   When execute method GET
   Then the status code should be 200
 
